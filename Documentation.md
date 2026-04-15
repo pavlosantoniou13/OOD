@@ -89,12 +89,11 @@ To keep the project stable and the code clean during development, we must follow
 
 ## UML Diagram
 
-![UML Diagram](./UML.drawio.jpg)
+![UML Diagram](images/UML4.jpg)
 
 
 
 ---
-
 ## Design Rationale
 
 ### a) Identified Weakness
@@ -107,7 +106,6 @@ Introducing any type of new strategy calculation would require changing both the
 
 For example, if a new requirement states that users should be able to select different calculation methods at runtime, the old design would require adding conditional logic inside the `Product` class (if/else or switch statements), leading to code that is harder to maintain and scale.
 
----
 
 ### b) Principle Applied
 
@@ -117,7 +115,6 @@ In this project, `Product` is a core domain class and should not be dependent on
 
 This principle matters because the system is expected to evolve over time and be scalable, meaning a change or extension of a class should not require changes to multiple other classes.
 
----
 
 ### c) Refactoring Move
 
@@ -128,7 +125,6 @@ This principle matters because the system is expected to evolve over time and be
 
 This resolves the violation by decoupling `Product` from a specific impact calculation strategy. Now, any strategy that implements the interface can be used interchangeably.
 
----
 
 ### d) Design Impact
 
@@ -140,3 +136,4 @@ This resolves the violation by decoupling `Product` from a specific impact calcu
 
 - **What new capabilities does the design support without modification?**  
   The system now supports plugging in different strategies at runtime without modifying existing classes or adding excessive conditional logic.  
+---
