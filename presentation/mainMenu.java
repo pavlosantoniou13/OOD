@@ -3,7 +3,7 @@ package presentation;
 import application.ProductService;
 import java.util.Scanner;
 
-public class ConsoleMenu {
+public class mainMenu {
     Scanner scanner = new Scanner(System.in);
     public void start() {
         System.out.println("--- Menu ---");
