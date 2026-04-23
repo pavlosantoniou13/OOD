@@ -17,6 +17,10 @@ public class OutputFormatter {
         System.out.println("\nError: " + message);
     }
 
+    public void printPrompt(String text) {
+        System.out.print(text + ": ");
+    }
+
     public void printDivider() {
         System.out.println("------------------------");
     }
