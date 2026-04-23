@@ -18,7 +18,7 @@ public class ConsoleMenu {
         this.inputParser = new InputParser(scanner, formatter);
         this.productMenu = new ProductMenu(productService, materialService, inputParser, formatter);
         this.materialMenu = new MaterialMenu(materialService, inputParser, formatter);
-        this.reportMenu = new ReportMenu();
+        this.reportMenu = new ReportMenu(productService, inputParser, formatter);
 
     }
 
