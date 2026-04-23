@@ -2,7 +2,7 @@ package presentation;
 
 import java.util.Scanner;
 
-public class materialMenu {
+public class MaterialMenu {
     Scanner scanner = new Scanner(System.in);
 
 }
