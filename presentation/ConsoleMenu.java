@@ -16,8 +16,8 @@ public class ConsoleMenu {
         this.scanner = new Scanner(System.in);
         this.formatter = new OutputFormatter();
         this.inputParser = new InputParser(scanner, formatter);
-        this.productMenu = new ProductMenu();
-        this.materialMenu = new MaterialMenu();
+        this.productMenu = new ProductMenu(productService, materialService, inputParser, formatter);
+        this.materialMenu = new MaterialMenu(materialService, inputParser, formatter);
         this.reportMenu = new ReportMenu();
 
     }
@@ -29,7 +29,13 @@ public class ConsoleMenu {
             int choice = inputParser.readMenuChoice(1, 4);
 
             switch (choice) {
-                // needs to be implemented
+                case 1 -> productMenu.show();
+                case 2 -> materialMenu.show();
+                // Report Menu
+                case 4 -> {
+                    formatter.printSuccess("Goodbye!");
+                    running = false;
+                }
             }
         }
     }
