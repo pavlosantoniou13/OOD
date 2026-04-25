@@ -1,7 +1,7 @@
 package domain;
 import java.util.List;
 
-public interface materialRepository {
+public interface MaterialRepository {
     void save(Material material);
     List<Material> findAll();
 }
