@@ -1,6 +1,4 @@
 package domain;
-
-public class RecyclingGuidance {
-    // This will probably have a if statement using some instanceOf function to determine the instructions returned to the end user
-    public String instructions = "";
+// look up what a record is, it's better and will help us avoid boilerplate code.
+public record RecyclingGuidance(boolean mixedMaterial, String message) {
 }
