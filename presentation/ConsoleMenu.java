@@ -24,7 +24,7 @@ public class ConsoleMenu {
             switch (choice) {
                 case 1 -> productMenu.show();
                 case 2 -> materialMenu.show();
-                // Report Menu
+                case 3 -> reportMenu.show();
                 case 4 -> {
                     formatter.printSuccess("Goodbye!");
                     running = false;
