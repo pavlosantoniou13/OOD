@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import domain.*;
 
-public class inMemoryMaterialRepository implements materialRepository {
+public class inMemoryMaterialRepository implements MaterialRepository {
     private final ArrayList<Material> storage = new ArrayList<>();
 
     @Override
@@ -20,7 +20,11 @@ public class inMemoryMaterialRepository implements materialRepository {
 
     @Override
     public Material findById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        for(Material m : storage) {
+            if(m.getId() == id) {
+                return m;
+            }
+        }
+        return null;
     }
 }

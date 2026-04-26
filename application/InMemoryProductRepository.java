@@ -20,7 +20,11 @@ public class InMemoryProductRepository implements ProductRepository {
 
     @Override
     public Product findById(UUID id) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'findById'");
+        for(Product p : storage) {
+            if(p.getId() == id) {
+                return p;
+            }
+        }
+        return null;
     }
 }
