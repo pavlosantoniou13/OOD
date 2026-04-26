@@ -1,7 +1,10 @@
 package domain;
 import java.util.List;
+import java.util.UUID;
+
 
 public interface materialRepository {
     void save(Material material);
     List<Material> findAll();
+    Material findById(UUID id);
 }
