@@ -27,12 +27,37 @@ public class Product {
         return strategy.calculate(this);
     }
 
-    // recyclingGuidance()
+    // recyclingGuidance() TODO
 
-    // Getters TODO
-    // return id, name, category, lifespan, materials
+    public UUID getId() {
+        return id;
+    }
 
-    // Setters TODO
-    // setName, setCategory, setLifespan
+    public String getName() {
+        return name;
+    }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public int getLifespanYears() {
+        return lifespanYears;
+    }
+
+    public List<Material> getMaterials() {
+        return materials;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public void setLifespanYears(int lifespanYears) {
+        this.lifespanYears = lifespanYears;
+    }
 }
