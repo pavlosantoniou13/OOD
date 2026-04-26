@@ -1,25 +1,18 @@
 package presentation;
 
-import application.MaterialService;
-import application.ProductService;
-import java.util.Scanner;
-
 public class ConsoleMenu {
-    private final Scanner scanner;
     private final OutputFormatter formatter;
     private final InputParser inputParser;
     private final ProductMenu productMenu;
     private final MaterialMenu materialMenu;
     private final ReportMenu reportMenu;
 
-    public ConsoleMenu(ProductService productService, MaterialService materialService) {
-        this.scanner = new Scanner(System.in);
-        this.formatter = new OutputFormatter();
-        this.inputParser = new InputParser(scanner, formatter);
-        this.productMenu = new ProductMenu(productService, materialService, inputParser, formatter);
-        this.materialMenu = new MaterialMenu(materialService, inputParser, formatter);
-        this.reportMenu = new ReportMenu(productService, inputParser, formatter);
-
+    public ConsoleMenu(InputParser inputParser, OutputFormatter formatter, ProductMenu productMenu, MaterialMenu materialMenu, ReportMenu reportMenu) {
+        this.formatter = formatter;
+        this.inputParser = inputParser;
+        this.productMenu = productMenu;
+        this.materialMenu = materialMenu;
+        this.reportMenu = reportMenu;
     }
 
     public void start() {
