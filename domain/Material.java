@@ -15,9 +15,13 @@ public class Material {
         this.recyclingInstruction = recyclingInstruction;
     }
 
-    // Getters TODO
-    // return id, name, environmentalImpactValue
+    public UUID getId() { return id; }
+    public String getName() { return name; }
+    public double getEnvironmentalImpactValue() { return environmentalImpactValue; }
+    public String getRecyclingInstruction() { return recyclingInstruction; }
 
-    // Setters TODO
-    // setName(), setEnvironmentalImpactValue(), setRecyclingInstruction()
+    public void setName(String name) { this.name = name; }
+    public void setEnvironmentalImpactValue(double value) { this.environmentalImpactValue = value; }
+    public void setRecyclingInstruction(String instruction) { this.recyclingInstruction = instruction; }
+    
 }

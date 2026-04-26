@@ -12,7 +12,7 @@ public class ProductService {
     }
 
     public void createProduct(String name, String category, int lifespan) {
-        Product product = new Product(name);
+        Product product = new Product(name, category, lifespan);
         repository.save(product);
     }
 
