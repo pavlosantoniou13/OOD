@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import domain.*;
 
-public class inMemoryMaterialRepository implements MaterialRepository {
+public class InMemoryMaterialRepository implements MaterialRepository {
     private final ArrayList<Material> storage = new ArrayList<>();
 
     @Override
