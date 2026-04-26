@@ -28,6 +28,17 @@ public class InputParser {
             }
         }
     }
+    public double readDouble(String prompt) {
+        while (true) {
+            formatter.printPrompt(prompt);
+            String input = scanner.nextLine().trim();
+            try {
+                return Double.parseDouble(input);
+            } catch (NumberFormatException e) {
+                formatter.printError("Please enter a valid decimal number.");
+            }
+        }
+    }
 
     public int readMenuChoice(int min, int max) {
         while (true) {
