@@ -36,12 +36,29 @@ public class MaterialMenu {
         formatter.printDivider();
     }
 
-    private void createMaterial() { // TODO
-
+    private void createMaterial() { 
         
+
+        String name = inputParser.readString("Enter material name: ");
+        Double Impactvalue = inputParser.readDouble("Enter material impact value: ");
+        String recyclingInstruction = inputParser.readString("Enter recycling instruction: ");
+        try {
+            materialService.addMaterial(name, Impactvalue, recyclingInstruction);
+            formatter.printSuccess("Material created successfully.");
+        } catch (Exception e) {
+            formatter.printError("Failed to create material: " + e.getMessage());
+        }
     }
 
-    private void listMaterials() { // TODO
+    private void listMaterials() { // TODO: Implement listing materials
+        formatter.printHeader("Materials List");
+        materialService.getAllMaterials().forEach(material -> {
+            System.out.println("Name: " + material.getName());
+            System.out.println("Impact Value: " + material.getEnvironmentalImpactValue());
+            System.out.println("Recycling Instruction: " + material.getRecyclingInstruction());
+            formatter.printDivider();
+        });
+
       
     }
 }
