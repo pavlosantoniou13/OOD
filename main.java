@@ -1,11 +1,19 @@
 import application.*;
+import domain.ImpactStrategy;
 import presentation.*;
 
 public class Main {
     public static void main(String[] args) {
-        var repository = new InMemoryProductRepository();
-        var service = new ProductService(repository);
+        // Wire dependencies (Constructor Injection)
+        InMemoryProductRepository productRepo = new InMemoryProductRepository();
+        InMemoryMaterialRepository materialRepo = new InMemoryMaterialRepository();
 
-        System.out.println("Walking skeleton!");
+        ImpactStrategy  impactStrategy = new SimpleSumStrategy();
+
+        ProductService productService = new ProductService(productRepo, materialRepo, impactStrategy);
+        MaterialService materialService = new MaterialService(materialRepo);
+
+        ConsoleMenu menu = new ConsoleMenu(productService, materialService);
+        menu.start();
     }
 }
