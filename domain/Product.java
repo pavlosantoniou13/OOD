@@ -9,18 +9,17 @@ public class Product {
     private String name;
     private int lifespanYears;
     private String category;
-    public List<Material> materials = new ArrayList<>();
+    public List<MaterialQuantity> materialQuantities = new ArrayList<>();
 
     public Product(String name, String category, int lifespanYears) {
         this.id = UUID.randomUUID();
         this.name = name;
         this.category = category;
         this.lifespanYears = lifespanYears;
-        this.materials = new ArrayList<>();
     }
 
-    public void addMaterial(Material material) {
-        materials.add(material);
+    public void addMaterial(Material material, double quantity) {
+        materialQuantities.add(new MaterialQuantity(material, quantity));
     }
 
     public double calculateImpact(ImpactStrategy strategy) {
@@ -33,7 +32,9 @@ public class Product {
     public String getName() { return name; }
     public String getCategory() { return category; }
     public int getLifespanYears() { return lifespanYears; }
-    public List<Material> getMaterials() { return new ArrayList<>(materials); }
+    public List<MaterialQuantity> getMaterialQuantities() { 
+        return new ArrayList<>(materialQuantities); 
+    }
 
     // Setters
     public void setName(String name) { this.name = name; }
