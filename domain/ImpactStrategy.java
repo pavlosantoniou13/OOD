@@ -1,5 +1,5 @@
 package domain;
 
 public interface ImpactStrategy {
-    public String mode = "";
+    double calculate(Product product); 
 }
