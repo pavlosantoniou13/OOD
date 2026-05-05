@@ -88,3 +88,37 @@ This system ensures that an **Inward Dependancy Rule** is followed:
 - **Maintenance through injection**: The direction is maintained by using **Constructor Injection** in `Main`, which means that it instantiates the concrete repository and injects it into the service. This leads to the service not knowing about the concrete storage class, only the interface in the domain layer.  
 
 ---
+
+## Strategy Pattern Rationale
+
+## a) Problem Solved
+The system needs to calculate environmental impact using different formulas. Without Strategy, this logic would be hard-coded inside `Product` or `ProductService` as conditional if/switch blocks. Every new formula would require modifying existing classes, violating the Open/Closed (OP) rule.
+
+## b) Why Strategy Was Appropriate
+- **Multiple algorithms for the same task**: Simple raw sum vs. lifespan-adjusted weighted calculation
+- **Behavior varies without changing callers**: `Product.calculateImpact()` delegates to any injected strategy
+- **Testable in isolation**: Each strategy is a separate class with no UI dependencies
+- **OCP compliance**: New strategies can be added without touching `Product` or `ProductService`
+
+## c) What Improved
+- `Product` remains stable when calculation rules change
+- `ProductService` depends on `ImpactStrategy` interface, not concrete implementations which lines in with DIP rule.
+- Formulas are documented and contained in dedicated classes
+- Unit tests can verify each algorithm independently
+
+## d) What Would Happen Without It
+Calculation logic would be scattered across services with if/switch blocks. Adding a third formula for example, would require editing multiple existing classes, increasing bug risk and making testing harder. The UI layer might end up containing business logic to select calculation modes.
+
+## Strategy Implementations
+| Strategy | Formula | Use Case |
+|----------|---------|----------|
+| **SimpleSumStrategy** | Σ(m_i × EF_i) | Quick raw footprint estimate |
+| **WeightedStrategy** | (Σ(m_i × EF_i) / L) × (1 − Σ((m_i/M) × R_i × δ)) | Annualized impact with recyclability credit |
+
+Legend:
+- m_i = mass of material i
+- EF_i = emission factor of material i
+- L = product lifespan in years
+- M = total product mass
+- R_i = recyclability score (0–1)
+- δ = end-of-life credit factor (0.15)
