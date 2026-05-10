@@ -21,7 +21,7 @@ public class InMemoryMaterialRepository implements MaterialRepository {
     @Override
     public Material findById(UUID id) {
         for(Material m : storage) {
-            if(m.getId() == id) {
+            if(m.getId().equals(id)) {
                 return m;
             }
         }
