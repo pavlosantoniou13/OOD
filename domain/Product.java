@@ -26,7 +26,36 @@ public class Product {
         return strategy.calculate(this);
     }
 
-    // recyclingGuidance()
+   public RecyclingGuidance getRecyclingGuidance() {
+        List<MaterialQuantity> materials = getMaterialQuantities();
+
+        if (materials.isEmpty()) {
+            return new RecyclingGuidance(false, "No materials registered for this product.");
+        }
+
+        boolean isMixed = materials.size() > 1;
+
+        if (!isMixed) {
+            Material material = materials.get(0).material();
+            return new RecyclingGuidance(false, 
+                "Single-material product. " + material.getRecyclingInstruction() + 
+                " (Recyclability: " + String.format("%.0f%%", material.getRecyclabilityScore() * 100) + ")");
+        }
+
+        // Mixed material product
+        StringBuilder message = new StringBuilder();
+        message.append("Mixed-material product. Disassemble and recycle components separately:");
+
+        for (MaterialQuantity mq : materials) {
+            Material m = mq.material();
+            message.append("  - ").append(m.getName())
+                   .append(" (").append(String.format("%.2f", mq.quantity())).append(" kg): ")
+                   .append(m.getRecyclingInstruction())
+                   .append(" (Recyclability: ").append(String.format("%.0f%%", m.getRecyclabilityScore() * 100)).append(")\n");
+        }
+
+        return new RecyclingGuidance(true, message.toString().trim());
+    }
 
     public UUID getId() { return id; }
     public String getName() { return name; }
