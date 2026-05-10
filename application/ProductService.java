@@ -1,5 +1,7 @@
 package application;
 import java.util.List;
+import java.util.UUID;
+
 import domain.*;
 
 public class ProductService {
@@ -22,5 +24,22 @@ public class ProductService {
 
     public List<Product> getAllProducts() {
         return repository.findAll();
+    }
+
+      public Product findById(UUID id) {
+        return repository.findById(id);
+    }
+
+    public ImpactResult getImpactReport(Product product) {
+        double impact = product.calculateImpact(impactStrategy);
+        String severity;
+        if (impact < 50) severity = "Low";
+        else if (impact < 150) severity = "Moderate";
+        else severity = "High";
+        return new ImpactResult(product.getName(), impact, severity);
+    }
+
+    public RecyclingGuidance getRecyclingGuidance(Product product) {
+        return product.getRecyclingGuidance();
     }
 }
