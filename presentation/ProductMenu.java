@@ -1,6 +1,8 @@
 package presentation;
 
 import application.ProductService;
+import domain.Material;
+import domain.Product;
 import application.MaterialService;
 
 import java.util.List;
@@ -41,7 +43,47 @@ public class ProductMenu {
     }
 
     private void createProduct() {
-        // TODO
+        String name = inputParser.readString("Enter product name");
+        String category = inputParser.readString("Enter product category");
+        int lifespan = inputParser.readInt("Enter estimated lifespan (years)");
+
+        List<Material> availableMaterials = materialService.getAllMaterials();
+        if (availableMaterials.isEmpty()) {
+            formatter.printError("No materials available. Create materials first.");
+            return;
+        }
+
+        // Create the product first
+        productService.createProduct(name, category, lifespan);
+
+        // Get the last created product (since we don't have createProduct returning the product)
+        List<Product> allProducts = productService.getAllProducts();
+        Product product = allProducts.get(allProducts.size() - 1);
+
+        // Add materials
+        boolean addingMaterials = true;
+        while (addingMaterials) {
+            formatter.printHeader("Add Material to Product");
+            for (int i = 0; i < availableMaterials.size(); i++) {
+                Material m = availableMaterials.get(i);
+                System.out.println((i + 1) + ". " + m.getName() + " (Impact: " + m.getEnvironmentalImpactValue() + ")");
+            }
+            System.out.println((availableMaterials.size() + 1) + ". Done adding materials");
+            formatter.printDivider();
+
+            int materialChoice = inputParser.readMenuChoice(1, availableMaterials.size() + 1);
+
+            if (materialChoice == availableMaterials.size() + 1) {
+                addingMaterials = false;
+            } else {
+                Material selectedMaterial = availableMaterials.get(materialChoice - 1);
+                double quantity = inputParser.readDouble("Enter quantity (kg) for " + selectedMaterial.getName());
+                product.addMaterial(selectedMaterial, quantity);
+                formatter.printSuccess("Added " + selectedMaterial.getName() + " (" + quantity + " kg) to product.");
+            }
+        }
+
+        formatter.printSuccess(name + " created successfully with " + product.getMaterialQuantities().size() + " material(s).");
     }
 
     private void listProducts() {
