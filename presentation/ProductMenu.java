@@ -87,7 +87,21 @@ public class ProductMenu {
     }
 
     private void listProducts() {
-        // TODO
+        List<Product> products = productService.getAllProducts();
+        formatter.printHeader("Products List");
+
+        if (products.isEmpty()) {
+            formatter.printError("No products registered.");
+            return;
+        }
+
+        for (Product product : products) {
+            System.out.println("Name: " + product.getName());
+            System.out.println("Category: " + product.getCategory());
+            System.out.println("Lifespan: " + product.getLifespanYears() + " years");
+            System.out.println("Materials: " + product.getMaterialQuantities().size());
+            formatter.printDivider();
+        }
 
     }
 }
