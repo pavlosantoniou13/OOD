@@ -1,6 +1,12 @@
 package presentation;
+
+import java.util.List;
 import java.util.UUID;
+
+import application.ImpactResult;
 import application.ProductService;
+import domain.Product;
+import domain.RecyclingGuidance;
 
 public class ReportMenu {
     private final ProductService productService;
@@ -15,7 +21,7 @@ public class ReportMenu {
 
     public void show() {
         boolean back = false;
-        
+
         while (!back) {
             showOptions();
             int choice = inputParser.readMenuChoice(1, 4);
@@ -39,18 +45,79 @@ public class ReportMenu {
     }
 
     private void showImpactReport() {
-        //TODO
+        Product product = selectProduct();
+        if (product == null) return;
+
+        ImpactResult result = productService.getImpactReport(product);
+        formatter.printHeader("Impact Report: " + result.productName());
+        System.out.println("Impact Value: " + String.format("%.4f", result.value()));
+        System.out.println("Severity: " + result.severity());
+        formatter.printDivider();
     }
 
     private void showRecyclingGuidance() {
-        //TODO
+        Product product = selectProduct();
+        if (product == null) return;
+
+        RecyclingGuidance guidance = productService.getRecyclingGuidance(product);
+        formatter.printHeader("Recycling Guidance: " + product.getName());
+        System.out.println("Material Type: " + (guidance.mixedMaterial() ? "Mixed Material" : "Single Material"));
+        System.out.println(guidance.message());
+        formatter.printDivider();
     }
 
     private void listAllProducts() {
-        //TODO
+        List<Product> products = productService.getAllProducts();
+        formatter.printHeader("All Products");
+
+        if (products.isEmpty()) {
+            formatter.printError("No products registered.");
+            return;
+        }
+
+        for (Product product : products) {
+            System.out.println("ID: " + product.getId());
+            System.out.println("Name: " + product.getName());
+            System.out.println("Category: " + product.getCategory());
+            System.out.println("Lifespan: " + product.getLifespanYears() + " years");
+
+            List<domain.MaterialQuantity> materials = product.getMaterialQuantities();
+            if (materials.isEmpty()) {
+                System.out.println("Materials: None");
+            } else {
+                System.out.println("Materials:");
+                for (domain.MaterialQuantity mq : materials) {
+                    System.out.println("  - " + mq.material().getName() + 
+                                       " (" + String.format("%.2f", mq.quantity()) + " kg)");
+                }
+            }
+
+            ImpactResult impact = productService.getImpactReport(product);
+            System.out.println("Impact: " + String.format("%.4f", impact.value()) + " (" + impact.severity() + ")");
+
+            RecyclingGuidance guidance = productService.getRecyclingGuidance(product);
+            System.out.println("Recycling: " + (guidance.mixedMaterial() ? "Mixed" : "Single"));
+
+            formatter.printDivider();
+        }
     }
 
-    private UUID selectProduct() {
-        //TODO
+    private Product selectProduct() {
+        List<Product> products = productService.getAllProducts();
+
+        if (products.isEmpty()) {
+            formatter.printError("No products available. Create a product first.");
+            return null;
+        }
+
+        formatter.printHeader("Select a Product");
+        for (int i = 0; i < products.size(); i++) {
+            Product p = products.get(i);
+            System.out.println((i + 1) + ". " + p.getName() + " (" + p.getCategory() + ")");
+        }
+        formatter.printDivider();
+
+        int choice = inputParser.readMenuChoice(1, products.size());
+        return products.get(choice - 1);
     }
 }
