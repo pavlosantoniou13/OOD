@@ -57,6 +57,7 @@ public class Product {
         return new RecyclingGuidance(true, message.toString().trim());
     }
 
+    // Getters
     public UUID getId() { return id; }
     public String getName() { return name; }
     public String getCategory() { return category; }
