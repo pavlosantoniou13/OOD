@@ -21,7 +21,7 @@ public class InMemoryProductRepository implements ProductRepository {
     @Override
     public Product findById(UUID id) {
         for(Product p : storage) {
-            if(p.getId() == id) {
+            if(p.getId().equals(id)) {
                 return p;
             }
         }
