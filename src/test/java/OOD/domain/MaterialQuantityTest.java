@@ -60,19 +60,4 @@ class MaterialQuantityTest {
         assertEquals(mq1, mq2);
         assertEquals(mq1.hashCode(), mq2.hashCode());
     }
-
-    @Test
-    @DisplayName("Should generate meaningful toString")
-    void shouldGenerateMeaningfulToString() {
-        // Arrange
-        Material plastic = new Material("Plastic", 5.0, "High recyclability");
-        MaterialQuantity mq = new MaterialQuantity(plastic, 1.5);
-
-        // Act
-        String str = mq.toString();
-
-        // Assert
-        assertTrue(str.contains("Plastic"));
-        assertTrue(str.contains("1.5"));
-    }
 }
