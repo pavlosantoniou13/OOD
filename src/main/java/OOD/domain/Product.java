@@ -26,32 +26,51 @@ public class Product {
         return strategy.calculate(this);
     }
 
-   public RecyclingGuidance getRecyclingGuidance() {
+    // REFACTORED: Extracted getRecyclingGuidance into smaller methods
+    public RecyclingGuidance getRecyclingGuidance() {
         List<MaterialQuantity> materials = getMaterialQuantities();
 
         if (materials.isEmpty()) {
-            return new RecyclingGuidance(false, "No materials registered for this product.");
+            return createEmptyGuidance();
         }
 
-        boolean isMixed = materials.size() > 1;
-
-        if (!isMixed) {
-            Material material = materials.get(0).material();
-            return new RecyclingGuidance(false, 
-                "Single-material product. " + material.getRecyclingInstruction() + 
-                " (Recyclability: " + String.format("%.0f%%", material.getRecyclabilityScore() * 100) + ")");
+        if (materials.size() == 1) {
+            return createSingleMaterialGuidance(materials.get(0));
         }
 
-        // Mixed material product
+        return createMixedMaterialGuidance(materials);
+    }
+
+    // Empty product 
+    private RecyclingGuidance createEmptyGuidance() {
+        return new RecyclingGuidance(false, "No materials registered for this product.");
+    }
+
+    // Single material 
+    private RecyclingGuidance createSingleMaterialGuidance(MaterialQuantity mq) {
+        Material material = mq.material();
+        String message = String.format(
+            "Single-material product. %s (Recyclability: %.0f%%)",
+            material.getRecyclingInstruction(),
+            material.getRecyclabilityScore() * 100
+        );
+        return new RecyclingGuidance(false, message);
+    }
+
+    // EXTRACTED METHOD: Mixed material 
+    private RecyclingGuidance createMixedMaterialGuidance(List<MaterialQuantity> materials) {
         StringBuilder message = new StringBuilder();
         message.append("Mixed-material product. Disassemble and recycle components separately:");
 
         for (MaterialQuantity mq : materials) {
             Material m = mq.material();
-            message.append("  - ").append(m.getName())
-                   .append(" (").append(String.format("%.2f", mq.quantity())).append(" kg): ")
-                   .append(m.getRecyclingInstruction())
-                   .append(" (Recyclability: ").append(String.format("%.0f%%", m.getRecyclabilityScore() * 100)).append(")\n");
+            message.append(String.format(
+                "\n  - %s (%.2f kg): %s (Recyclability: %.0f%%)",
+                m.getName(),
+                mq.quantity(),
+                m.getRecyclingInstruction(),
+                m.getRecyclabilityScore() * 100
+            ));
         }
 
         return new RecyclingGuidance(true, message.toString().trim());
