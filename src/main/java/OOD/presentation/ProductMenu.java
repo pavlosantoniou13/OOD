@@ -77,6 +77,7 @@ public class ProductMenu {
                 double quantity = inputParser.readDouble("Enter quantity (kg) for " + selectedMaterial.getName());
                 product.addMaterial(selectedMaterial, quantity);
                 formatter.printSuccess("Added " + selectedMaterial.getName() + " (" + quantity + " kg) to product.");
+                count++;
             }
         }
         return count;
