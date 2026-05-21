@@ -53,12 +53,13 @@ public class ProductMenu {
             return;
         }
 
-        // Create the product first
         productService.createProduct(name, category, lifespan);
+        Product product = getLastCreatedProduct();
 
-        // Get the last created product (since we don't have createProduct returning the product)
-        List<Product> allProducts = productService.getAllProducts();
-        Product product = allProducts.get(allProducts.size() - 1);
+        int materialCount = selectMaterialsForProduct(product, availableMaterials);
+
+        formatter.printSuccess(name + " created successfully with " + materialCount + " material(s).");
+    }
 
         // Add materials
         boolean addingMaterials = true;
