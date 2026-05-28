@@ -10,7 +10,6 @@ public class Main {
         InMemoryProductRepository productRepo = new InMemoryProductRepository();
         InMemoryMaterialRepository materialRepo = new InMemoryMaterialRepository();
 
-        // Establish the initial default algorithm setup context
         ImpactStrategy defaultStrategy = new SimpleSumStrategy();
         ProductService productService = new ProductService(productRepo, materialRepo, defaultStrategy);
         MaterialService materialService = new MaterialService(materialRepo);
