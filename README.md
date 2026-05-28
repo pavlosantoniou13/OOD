@@ -1,4 +1,5 @@
 # OOD-Project
+![Java CI Status](https://github.com/pavlosantoniou13/OOD/actions/workflows/ci.yml/badge.svg)
 
 ## Project Overview
 This system is designed to manage products and reusable materials while calculating their environmental impact and providing recycling guidance. It focuses on sustainable production and consumption patterns in alignment with Sustainable Development Goal 12.
@@ -131,9 +132,7 @@ Legend:
 # Bootstrap the interactive terminal menu loop console direct
 ./gradlew run
 
----
-
----
+```
 
 ## 📊 Behavioral Domain Modeling Trace
 
