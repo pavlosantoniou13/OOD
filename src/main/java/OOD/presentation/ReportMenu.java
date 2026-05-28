@@ -76,6 +76,7 @@ public class ReportMenu {
         formatter.printDivider();
     }
 
+    // REFACTORED: Now delegates formatting to extracted methods
     private void listAllProducts() {
         List<Product> products = productService.getAllProducts();
         formatter.printHeader("Registered Inventory Summary");

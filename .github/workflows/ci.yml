@@ -1,0 +1,26 @@
+name: Java CI
+
+on:
+  push:
+    branches: [ main, Development, refactor/week-9 ]
+  pull_request:
+    branches: [ main, Development ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+
+      - name: Configure Java Development Kit
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Execute Automated Test Suites
+        run: ./gradlew test

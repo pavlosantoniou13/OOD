@@ -9,7 +9,7 @@ public class Product {
     private String name;
     private int lifespanYears;
     private String category;
-    public List<MaterialQuantity> materialQuantities = new ArrayList<>();
+    private List<MaterialQuantity> materialQuantities = new ArrayList<>();
 
     public Product(String name, String category, int lifespanYears) {
         this.id = UUID.randomUUID();
