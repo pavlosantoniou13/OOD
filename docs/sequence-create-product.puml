@@ -1,0 +1,56 @@
+@startuml
+skinparam Style strictuml
+title Week 10: Create Product Flow (Layered Architecture Trace)
+
+actor "User" as U
+box "Presentation Layer" #LightBlue
+    participant "menu : ProductMenu" as PM
+    participant "parser : InputParser" as IP
+end box
+
+box "Application Layer" #LightGreen
+    participant "service : ProductService" as PS
+    participant "repo : ProductRepository" as PR
+end box
+
+box "Domain Layer" #LightPink
+    participant "product : Product" as P
+end box
+
+U -> PM : Selects Option 1 (Create Product)
+activate PM
+
+PM -> IP : readString("Enter product name")
+activate IP
+IP --> PM : nameString
+deactivate IP
+
+PM -> IP : readString("Enter product category")
+activate IP
+IP --> PM : categoryString
+deactivate IP
+
+PM -> IP : readInt("Enter estimated lifespan (years)")
+activate IP
+IP --> PM : lifespanInt
+deactivate IP
+
+PM -> PS : createProduct(nameString, categoryString, lifespanInt)
+activate PS
+
+PS -> P ** : new Product(name, category, lifespan)
+activate P
+P --> PS : productInstance
+deactivate P
+
+PS -> PR : save(productInstance)
+activate PR
+PR --> PS : void
+deactivate PR
+
+PS --> PM : void
+deactivate PS
+
+PM -> U : printSuccess("Product created successfully")
+deactivate PM
+@endum

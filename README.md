@@ -54,8 +54,7 @@ To keep the repository organized and easy to navigate, these branch naming conve
 ---
 ## Architectural Rationale
 
-## a) Layer Allocations 
-
+### a) Layer Allocations 
 This system implements a three-layer model to ensure a strict separation of responsibilities. Each class is assigned to a specific package based on its role in the project:  
 
 - **Domain Layer (domain/)**: This is the foundation of the project that contains entities such as `Product` and `Material`. It encapsulates the core business and environmental rules while remaining isolated from other parts such as the UI and storage processes.  
@@ -64,21 +63,14 @@ This system implements a three-layer model to ensure a strict separation of resp
 
 - **Presentation Layer (presentation/)**: This package handles all user interaction: what they see and what they can input. It contains the `ConsoleMenu` class, which has the responsibility of capturing user input via the `Scanner` and formatting an output. This layer contains no business logic at all.  
 
-
-
-## b) Interface Placements 
- 
+### b) Interface Placements 
 Major interfaces such as `ProductRepository` and `ImpactStrategy` were placed directly in the Domain layer. This decision follows the **Dependency Inversion Principle (DIP)**: 
 
 - **Ownership**: The domain layer “owns” the interface. It defines what it needs from a storage class or a calculation strategy class without being tied to a specific implementation.  
 
 - **Decoupling**: By placing the interface in the domain, the service classes depend only on abstractions. This allows all the implementation of `InMemoryProductRepository` (in the application layer) to be altered without any changes being made to the domain entities.  
 
-
-
-
-## c) Dependency Direction 
- 
+### c) Dependency Direction 
 This system ensures that an **Inward Dependency Rule** is followed: 
 
 - **One-way flow**: Dependencies point only inward towards higher-level layers, which means that the Presentation layer depends on the Application layer, and the Application layer depends on the Domain layer.  
@@ -90,34 +82,64 @@ This system ensures that an **Inward Dependency Rule** is followed:
 ---
 ## Strategy Pattern Rationale
 
-## a) Problem Solved
-The system needs to calculate environmental impact using different formulas. Without Strategy, this logic would be hard-coded inside `Product` or `ProductService` as conditional if/switch blocks. Every new formula would require modifying existing classes, violating the Open/Closed (OP) rule.
+### a) Problem Solved
+The system needs to calculate environmental impact using different formulas. Without Strategy, this logic would be hard-coded inside `Product` or `ProductService` as conditional if/switch blocks. Every new formula would require modifying existing classes, violating the Open/Closed Principle (OCP).
 
-## b) Why Strategy Was Appropriate
-- **Multiple algorithms for the same task**: Simple raw sum vs. lifespan-adjusted weighted calculation
-- **Behavior varies without changing callers**: `Product.calculateImpact()` delegates to any injected strategy
-- **Testable in isolation**: Each strategy is a separate class with no UI dependencies
-- **OCP compliance**: New strategies can be added without touching `Product` or `ProductService`
+### b) Why Strategy Was Appropriate
+* **Multiple algorithms for the same task**: Simple raw sum vs. lifespan-adjusted weighted calculation.
+* **Behavior varies without changing callers**: `Product.calculateImpact()` delegates to any injected strategy.
+* **Testable in isolation**: Each strategy is a separate class with no UI dependencies.
+* **OCP compliance**: New strategies can be added without touching `Product` or `ProductService`.
 
-## c) What Improved
-- `Product` remains stable when calculation rules change
-- `ProductService` depends on `ImpactStrategy` interface, not concrete implementations which lines in with DIP rule.
-- Formulas are documented and contained in dedicated classes
-- Unit tests can verify each algorithm independently
+### c) What Improved
+* `Product` remains stable when calculation rules change.
+* `ProductService` depends on `ImpactStrategy` interface, not concrete implementations, which lines up with the DIP rule.
+* Formulas are documented and contained in dedicated classes.
+* Unit tests can verify each algorithm independently.
+* **Dynamic Swapping**: Strategies can be hot-swapped dynamically via the terminal menu interface at runtime without modifying the underlying model state or service workflows.
 
-## d) What Would Happen Without It
-Calculation logic would be scattered across services with if/switch blocks. Adding a third formula for example, would require editing multiple existing classes, increasing bug risk and making testing harder. The UI layer might end up containing business logic to select calculation modes.
+### d) What Would Happen Without It
+Calculation logic would be scattered across services with if/switch blocks. Adding a third formula, for example, would require editing multiple existing classes, increasing bug risk and making testing harder. The UI layer might end up containing business logic to select calculation modes.
 
-## Strategy Implementations
+### Strategy Implementations
 | Strategy | Formula | Use Case |
 |----------|---------|----------|
-| **SimpleSumStrategy** | Σ(m_i × EF_i) | Quick raw footprint estimate |
-| **WeightedStrategy** | (Σ(m_i × EF_i) / L) × (1 − Σ((m_i/M) × R_i × δ)) | Annualized impact with recyclability credit |
+| **SimpleSumStrategy** | $\Sigma(m_i \times EF_i)$ | Quick raw footprint estimate |
+| **WeightedStrategy** | $\left(\frac{\Sigma(m_i \times EF_i)}{L}\right) \times \left(1 - \Sigma\left(\frac{m_i}{M} \times R_i \times \delta\right)\right)$ | Annualized impact with recyclability credit |
 
 Legend:
-- m_i = mass of material i
-- EF_i = emission factor of material i
-- L = product lifespan in years
-- M = total product mass
-- R_i = recyclability score (0–1)
-- δ = end-of-life credit factor (0.15)
+- $m_i$ = mass of material i
+- $EF_i$ = emission factor of material i
+- $L$ = product lifespan in years
+- $M$ = total product mass
+- $R_i$ = recyclability score (0–1)
+- $\delta$ = end-of-life credit factor (0.15)
+
+---
+
+## 🛠️ Build and Operational Verification Controls
+
+### Prerequisites
+* Java Development Kit (JDK) 21
+* Gradle 8.14+ (Internal Wrapper Provided)
+
+### Local CLI Compilation Tasks
+```bash
+# Clean operational artifact builds and trigger local unit testing hooks
+./gradlew clean test
+
+# Bootstrap the interactive terminal menu loop console direct
+./gradlew run
+
+---
+
+---
+
+## 📊 Behavioral Domain Modeling Trace
+
+### Layered Use-Case Execution Topology
+The sequence trace below models the message lifecycle orchestration required to fulfill a product creation use-case, demonstrating the clean communication paths mapped across our package layer components.
+
+![Layered Product Creation Flow](./docs/sequence-create-product.png)
+
+*The raw editable modeling configuration is archived inside the repository at `docs/sequence-create-product.puml` for architectural audit stability tracking.*
