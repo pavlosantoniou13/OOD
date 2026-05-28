@@ -1,4 +1,5 @@
 package OOD;
+
 import OOD.application.*;
 import OOD.domain.ImpactStrategy;
 import OOD.presentation.*;
@@ -9,13 +10,13 @@ public class Main {
         InMemoryProductRepository productRepo = new InMemoryProductRepository();
         InMemoryMaterialRepository materialRepo = new InMemoryMaterialRepository();
 
-        ImpactStrategy impactStrategy = new SimpleSumStrategy();
-        ProductService productService = new ProductService(productRepo, materialRepo, impactStrategy);
+        // Establish the initial default algorithm setup context
+        ImpactStrategy defaultStrategy = new SimpleSumStrategy();
+        ProductService productService = new ProductService(productRepo, materialRepo, defaultStrategy);
         MaterialService materialService = new MaterialService(materialRepo);
 
         Scanner scanner = new Scanner(System.in); 
-        OOD.presentation.OutputFormatter formatter = new OOD.presentation.OutputFormatter();
-        
+        OutputFormatter formatter = new OutputFormatter();
         InputParser inputParser = new InputParser(scanner, formatter);
 
         ProductMenu productMenu = new ProductMenu(productService, materialService, inputParser, formatter);
