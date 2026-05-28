@@ -53,24 +53,21 @@ public class ProductMenu {
             return;
         }
 
-        // Create the product first
         productService.createProduct(name, category, lifespan);
+        Product product = getLastCreatedProduct();
 
-        // Get the last created product (since we don't have createProduct returning the product)
-        List<Product> allProducts = productService.getAllProducts();
-        Product product = allProducts.get(allProducts.size() - 1);
+        int materialCount = selectMaterialsForProduct(product, availableMaterials);
 
-        // Add materials
+        formatter.printSuccess(name + " created successfully with " + materialCount + " material(s).");
+    }
+
+    // EXTRACTED METHOD: Was inline loop in createProduct()
+    private int selectMaterialsForProduct(Product product, List<Material> availableMaterials) {
         boolean addingMaterials = true;
-        while (addingMaterials) {
-            formatter.printHeader("Add Material to Product");
-            for (int i = 0; i < availableMaterials.size(); i++) {
-                Material m = availableMaterials.get(i);
-                System.out.println((i + 1) + ". " + m.getName() + " (Impact: " + m.getEnvironmentalImpactValue() + ")");
-            }
-            System.out.println((availableMaterials.size() + 1) + ". Done adding materials");
-            formatter.printDivider();
+        int count = 0;
 
+        while (addingMaterials) {
+            showMaterialSelectionMenu(availableMaterials);
             int materialChoice = inputParser.readMenuChoice(1, availableMaterials.size() + 1);
 
             if (materialChoice == availableMaterials.size() + 1) {
@@ -80,10 +77,27 @@ public class ProductMenu {
                 double quantity = inputParser.readDouble("Enter quantity (kg) for " + selectedMaterial.getName());
                 product.addMaterial(selectedMaterial, quantity);
                 formatter.printSuccess("Added " + selectedMaterial.getName() + " (" + quantity + " kg) to product.");
+                count++;
             }
         }
+        return count;
+    }
 
-        formatter.printSuccess(name + " created successfully with " + product.getMaterialQuantities().size() + " material(s).");
+    // EXTRACTED METHOD: Material selection display
+    private void showMaterialSelectionMenu(List<Material> materials) {
+        formatter.printHeader("Add Material to Product");
+        for (int i = 0; i < materials.size(); i++) {
+            Material m = materials.get(i);
+            System.out.println((i + 1) + ". " + m.getName() + " (Impact: " + m.getEnvironmentalImpactValue() + ")");
+        }
+        System.out.println((materials.size() + 1) + ". Done adding materials");
+        formatter.printDivider();
+    }
+
+    // EXTRACTED METHOD: Get last created product
+    private Product getLastCreatedProduct() {
+        List<Product> allProducts = productService.getAllProducts();
+        return allProducts.get(allProducts.size() - 1);
     }
 
     private void listProducts() {

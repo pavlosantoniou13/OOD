@@ -1,10 +1,10 @@
 package OOD.presentation;
 
 import java.util.List;
-import java.util.UUID;
 
 import OOD.application.ImpactResult;
 import OOD.application.ProductService;
+import OOD.domain.MaterialQuantity;
 import OOD.domain.Product;
 import OOD.domain.RecyclingGuidance;
 
@@ -66,6 +66,7 @@ public class ReportMenu {
         formatter.printDivider();
     }
 
+    // REFACTORED: Now delegates formatting to extracted methods
     private void listAllProducts() {
         List<Product> products = productService.getAllProducts();
         formatter.printHeader("All Products");
@@ -76,30 +77,48 @@ public class ReportMenu {
         }
 
         for (Product product : products) {
-            System.out.println("ID: " + product.getId());
-            System.out.println("Name: " + product.getName());
-            System.out.println("Category: " + product.getCategory());
-            System.out.println("Lifespan: " + product.getLifespanYears() + " years");
-
-            List<OOD.domain.MaterialQuantity> materials = product.getMaterialQuantities();
-            if (materials.isEmpty()) {
-                System.out.println("Materials: None");
-            } else {
-                System.out.println("Materials:");
-                for (OOD.domain.MaterialQuantity mq : materials) {
-                    System.out.println("  - " + mq.material().getName() + 
-                                       " (" + String.format("%.2f", mq.quantity()) + " kg)");
-                }
-            }
-
-            ImpactResult impact = productService.getImpactReport(product);
-            System.out.println("Impact: " + String.format("%.4f", impact.value()) + " (" + impact.severity() + ")");
-
-            RecyclingGuidance guidance = productService.getRecyclingGuidance(product);
-            System.out.println("Recycling: " + (guidance.mixedMaterial() ? "Mixed" : "Single"));
-
+            System.out.print(formatProductDetails(product));
             formatter.printDivider();
         }
+    }
+
+    // EXTRACTED METHOD: Formats a single product's details
+    private String formatProductDetails(Product product) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ID: ").append(product.getId()).append("");
+        sb.append("Name: ").append(product.getName()).append("");
+        sb.append("Category: ").append(product.getCategory()).append("");
+        sb.append("Lifespan: ").append(product.getLifespanYears()).append(" years");
+        sb.append(formatMaterials(product));
+        sb.append(formatImpact(product));
+        sb.append(formatRecycling(product));
+        return sb.toString();
+    }
+
+    // EXTRACTED METHOD: Formats material list
+    private String formatMaterials(Product product) {
+        List<MaterialQuantity> materials = product.getMaterialQuantities();
+        if (materials.isEmpty()) {
+            return "Materials: None";
+        }
+
+        StringBuilder sb = new StringBuilder("Materials: ");
+        for (MaterialQuantity mq : materials) {
+            sb.append(String.format("  - %s (%.2f kg)",mq.material().getName(), mq.quantity()));
+        }
+        return sb.toString();
+    }
+
+    // EXTRACTED METHOD: Formats impact summary
+    private String formatImpact(Product product) {
+        ImpactResult impact = productService.getImpactReport(product);
+        return String.format("Impact: %.4f (%s)", impact.value(), impact.severity());
+    }
+
+    // EXTRACTED METHOD: Formats recycling summary
+    private String formatRecycling(Product product) {
+        RecyclingGuidance guidance = productService.getRecyclingGuidance(product);
+        return "Recycling: " + (guidance.mixedMaterial() ? "Mixed" : "Single") + "";
     }
 
     private Product selectProduct() {
