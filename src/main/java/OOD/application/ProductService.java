@@ -1,20 +1,20 @@
 package OOD.application;
+
 import java.util.List;
 import java.util.UUID;
-
 import OOD.domain.*;
 
 public class ProductService {
-    // Reference of interface so the Service can use a test repo later on
     private final ProductRepository repository;
-    private final MaterialRepository materialRepository;
-    private final ImpactStrategy impactStrategy;
+    private ImpactStrategy impactStrategy;
 
-    // Inject for dependency inversion
-    public ProductService(ProductRepository repository, MaterialRepository materialRepository, ImpactStrategy impactStrategy) {
+    public ProductService(ProductRepository repository, ImpactStrategy impactStrategy) {
         this.repository = repository;
-        this.materialRepository = materialRepository;
         this.impactStrategy = impactStrategy;
+    }
+
+    public void setImpactStrategy(ImpactStrategy strategy) {
+        this.impactStrategy = strategy;
     }
 
     public void createProduct(String name, String category, int lifespan) {
@@ -26,7 +26,7 @@ public class ProductService {
         return repository.findAll();
     }
 
-      public Product findById(UUID id) {
+    public Product findById(UUID id) {
         return repository.findById(id);
     }
 

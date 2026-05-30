@@ -57,4 +57,8 @@ public class Material {
         this.recyclingInstruction = instruction; 
         this.recyclabilityScore = parseRecyclability(instruction);
     }
+
+    public void setRecyclabilityScore(double recyclabilityScore) {
+    this.recyclabilityScore = recyclabilityScore;
+    }
 }
