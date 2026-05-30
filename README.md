@@ -141,4 +141,14 @@ The sequence trace below models the message lifecycle orchestration required to 
 
 ![Layered Product Creation Flow](./docs/sequence-create-product.png)
 
-*The raw editable modeling configuration is archived inside the repository at `docs/sequence-create-product.puml` for architectural audit stability tracking.*
+---
+
+## UML Diagrams
+
+### Diagram without `Main` class
+![UMLDiagram1](./docs/UMLwithoutMain.drawio.png)
+
+### Diagram with `Main` class
+![UMLDiagram1](./docs/UMLwMain.drawio.png)
+
+---
