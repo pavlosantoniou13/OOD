@@ -13,7 +13,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductServiceTest {
 
     private InMemoryProductRepository productRepo;
-    private InMemoryMaterialRepository materialRepo;
     private ImpactStrategy fakeStrategy;
     private ProductService productService;
 
@@ -21,9 +20,8 @@ class ProductServiceTest {
     void setUp() {
         // Arrange: fresh repositories and a predictable fake strategy for each test
         productRepo = new InMemoryProductRepository();
-        materialRepo = new InMemoryMaterialRepository();
         fakeStrategy = product -> 100.0;  // Always returns 100.0 for predictability
-        productService = new ProductService(productRepo, materialRepo, fakeStrategy);
+        productService = new ProductService(productRepo, fakeStrategy);
     }
 
     @Test
@@ -84,7 +82,7 @@ class ProductServiceTest {
     void shouldReturnLowSeverityForImpactBelow50() {
         // Arrange
         ImpactStrategy lowImpactStrategy = product -> 25.0;
-        ProductService service = new ProductService(productRepo, materialRepo, lowImpactStrategy);
+        ProductService service = new ProductService(productRepo, lowImpactStrategy);
         Product product = new Product("LowImpact", "Test", 1);
 
         // Act
@@ -101,7 +99,7 @@ class ProductServiceTest {
     void shouldReturnModerateSeverityForImpactBetween50And150() {
         // Arrange
         ImpactStrategy moderateImpactStrategy = product -> 100.0;
-        ProductService service = new ProductService(productRepo, materialRepo, moderateImpactStrategy);
+        ProductService service = new ProductService(productRepo, moderateImpactStrategy);
         Product product = new Product("ModerateImpact", "Test", 1);
 
         // Act
@@ -118,7 +116,7 @@ class ProductServiceTest {
     void shouldReturnHighSeverityForImpactAbove150() {
         // Arrange
         ImpactStrategy highImpactStrategy = product -> 200.0;
-        ProductService service = new ProductService(productRepo, materialRepo, highImpactStrategy);
+        ProductService service = new ProductService(productRepo, highImpactStrategy);
         Product product = new Product("HighImpact", "Test", 1);
 
         // Act
@@ -135,7 +133,7 @@ class ProductServiceTest {
     void shouldReturnExactBoundaryLowSeverityAt49_999() {
         // Arrange
         ImpactStrategy boundaryStrategy = product -> 49.999;
-        ProductService service = new ProductService(productRepo, materialRepo, boundaryStrategy);
+        ProductService service = new ProductService(productRepo, boundaryStrategy);
         Product product = new Product("Boundary", "Test", 1);
 
         // Act
@@ -150,7 +148,7 @@ class ProductServiceTest {
     void shouldReturnExactBoundaryModerateSeverityAt50() {
         // Arrange
         ImpactStrategy boundaryStrategy = product -> 50.0;
-        ProductService service = new ProductService(productRepo, materialRepo, boundaryStrategy);
+        ProductService service = new ProductService(productRepo, boundaryStrategy);
         Product product = new Product("Boundary", "Test", 1);
 
         // Act
@@ -165,7 +163,7 @@ class ProductServiceTest {
     void shouldReturnExactBoundaryModerateSeverityAt149_999() {
         // Arrange
         ImpactStrategy boundaryStrategy = product -> 149.999;
-        ProductService service = new ProductService(productRepo, materialRepo, boundaryStrategy);
+        ProductService service = new ProductService(productRepo, boundaryStrategy);
         Product product = new Product("Boundary", "Test", 1);
 
         // Act
@@ -180,7 +178,7 @@ class ProductServiceTest {
     void shouldReturnExactBoundaryHighSeverityAt150() {
         // Arrange
         ImpactStrategy boundaryStrategy = product -> 150.0;
-        ProductService service = new ProductService(productRepo, materialRepo, boundaryStrategy);
+        ProductService service = new ProductService(productRepo, boundaryStrategy);
         Product product = new Product("Boundary", "Test", 1);
 
         // Act

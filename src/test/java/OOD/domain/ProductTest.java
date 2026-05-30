@@ -11,13 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class ProductTest {
 
     private Material plastic;
-    private Material glass;
     private Material metal;
 
     @BeforeEach
     void setUp() {
         plastic = new Material("Plastic", 5.0, "High recyclability");
-        glass = new Material("Glass", 2.5, "High recyclability");
         metal = new Material("Metal", 3.0, "Medium recyclability");
     }
 
