@@ -50,7 +50,7 @@ public class MaterialMenu {
         }
     }
 
-    private void listMaterials() { // TODO: Implement listing materials
+    private void listMaterials() {
         formatter.printHeader("Materials List");
         materialService.getAllMaterials().forEach(material -> {
             System.out.println("Name: " + material.getName());

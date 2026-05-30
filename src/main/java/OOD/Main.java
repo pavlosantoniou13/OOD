@@ -16,7 +16,7 @@ public class Main {
         PremadeLists(productRepo, materialRepo);
 
         ImpactStrategy defaultStrategy = new SimpleSumStrategy();
-        ProductService productService = new ProductService(productRepo, materialRepo, defaultStrategy);
+        ProductService productService = new ProductService(productRepo, defaultStrategy);
         MaterialService materialService = new MaterialService(materialRepo);
 
         Scanner scanner = new Scanner(System.in); 

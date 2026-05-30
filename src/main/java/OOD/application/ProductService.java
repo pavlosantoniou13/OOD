@@ -6,12 +6,10 @@ import OOD.domain.*;
 
 public class ProductService {
     private final ProductRepository repository;
-    private final MaterialRepository materialRepository;
     private ImpactStrategy impactStrategy;
 
-    public ProductService(ProductRepository repository, MaterialRepository materialRepository, ImpactStrategy impactStrategy) {
+    public ProductService(ProductRepository repository, ImpactStrategy impactStrategy) {
         this.repository = repository;
-        this.materialRepository = materialRepository;
         this.impactStrategy = impactStrategy;
     }
 

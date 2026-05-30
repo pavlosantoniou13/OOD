@@ -1,7 +1,6 @@
 package OOD.application;
 
 import OOD.domain.Material;
-import OOD.domain.MaterialQuantity;
 import OOD.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
